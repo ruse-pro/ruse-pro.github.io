@@ -7,50 +7,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #ffffff; --bg: #000000; --card: #0a0a0a; --accent: #00ff88; }
-        body { background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow-x: hidden; }
+        body { background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; }
+        .navbar { padding: 15px 10%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #111; background: rgba(0,0,0,0.9); position: sticky; top: 0; z-index: 1000; }
+        .nav-links a { color: #888; text-decoration: none; margin-left: 20px; font-family: 'Orbitron'; font-size: 0.7rem; }
+        .hero { padding: 80px 20px; text-align: center; }
+        .logo { font-family: 'Orbitron'; font-size: clamp(2.5rem, 8vw, 5rem); letter-spacing: 12px; margin: 0; }
+        .slogan { color: #444; letter-spacing: 2px; font-size: 1rem; margin-top: 15px; }
+
+        /* Panel & Wallet */
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .auth-box, .wallet-box { background: var(--card); border: 1px solid #1a1a1a; padding: 25px; border-radius: 8px; margin-bottom: 30px; display: none; }
+        input { background: #000; border: 1px solid #222; padding: 10px; color: #fff; font-family: 'Orbitron'; margin: 5px; outline: none; }
+        button { background: #fff; color: #000; border: none; padding: 10px 20px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; }
         
-        /* Navbar */
-        .navbar { padding: 20px 10%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #111; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
-        .nav-links a { color: #666; text-decoration: none; margin-left: 25px; font-family: 'Orbitron'; font-size: 0.8rem; transition: 0.3s; }
-        .nav-links a:hover { color: #fff; text-shadow: 0 0 10px #fff; }
+        .market-grid { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+        .market-card { background: var(--card); border: 1px solid #111; padding: 30px; width: 250px; border-radius: 10px; text-align: center; }
+        .price { font-size: 1.8rem; color: var(--accent); font-family: 'Orbitron'; margin: 15px 0; display: block; }
 
-        /* Hero & Slogan */
-        .hero { padding: 100px 20px; text-align: center; background: radial-gradient(circle at center, #111 0%, #000 70%); }
-        .logo { font-family: 'Orbitron'; font-size: clamp(3rem, 10vw, 6rem); letter-spacing: 15px; margin: 0; font-weight: 700; }
-        .slogan { color: #444; letter-spacing: 3px; font-size: 1.1rem; margin-top: 20px; text-transform: uppercase; }
-
-        /* Wallet & Market */
-        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
-        .wallet-box { background: var(--card); border: 1px solid #1a1a1a; padding: 30px; border-radius: 8px; margin-bottom: 50px; }
-        .wallet-box input { background: #000; border: 1px solid #222; padding: 12px; color: #fff; width: 50%; font-family: 'Orbitron'; outline: none; }
-        .wallet-box button { background: #fff; color: #000; border: none; padding: 12px 25px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .wallet-box button:hover { background: var(--accent); }
-
-        .market-grid { display: flex; gap: 25px; justify-content: center; flex-wrap: wrap; }
-        .market-card { background: var(--card); border: 1px solid #111; padding: 40px 30px; width: 280px; border-radius: 10px; transition: 0.4s; }
-        .market-card:hover { border-color: #fff; transform: translateY(-10px); }
-        .price { font-size: 2rem; color: var(--accent); font-family: 'Orbitron'; margin: 20px 0; display: block; }
-        .buy-btn { display: block; width: 100%; padding: 15px; background: #fff; color: #000; text-decoration: none; font-family: 'Orbitron'; font-weight: bold; border-radius: 4px; cursor: pointer; border: none; }
-
-        /* Ekip */
-        .team-section { background: #050505; padding: 80px 20px; border-top: 1px solid #111; }
-        .team-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 40px; }
-        .team-card { border: 1px solid #222; padding: 30px; width: 220px; transition: 0.3s; border-radius: 5px; }
-        .team-card:hover { border-color: var(--accent); background: #000; }
-        .team-card span { display: block; color: #444; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 10px; }
-        .team-card b { display: block; font-family: 'Orbitron'; font-size: 1.4rem; color: #fff; margin-bottom: 10px; }
-        .team-card small { color: #888; font-family: monospace; }
+        .team-grid { display: flex; justify-content: center; gap: 15px; padding: 40px; background: #050505; }
+        .t-card { border: 1px solid #222; padding: 20px; width: 180px; text-align: center; }
+        .t-card b { display: block; font-family: 'Orbitron'; font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
     <div class="navbar">
-        <div style="font-family:'Orbitron'; font-weight:bold; letter-spacing:2px;">RUSE<span style="color:var(--accent);">.PRO</span></div>
-        <div class="nav-links">
-            <a href="#market">MARKET</a>
-            <a href="#ekip">EKİP</a>
-            <a href="https://www.youtube.com/@ruse-pro" target="_blank">YOUTUBE</a>
-        </div>
+        <div style="font-family:'Orbitron'; font-weight:bold;">RUSE.PRO</div>
+        <div id="userStatus" style="font-family:'Orbitron'; font-size:0.7rem; color:var(--accent);">GİRİŞ YAPILMADI</div>
     </div>
 
     <div class="hero">
@@ -59,79 +42,117 @@
     </div>
 
     <div class="container">
-        <div class="wallet-box" id="market">
-            <h3 style="font-family:'Orbitron'; margin-top:0;">BAKİYE YÜKLE</h3>
-            <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-top:20px;">
-                <input type="text" id="redeemCode" placeholder="KODU BURAYA YAZ">
-                <button onclick="redeem()">YÜKLE</button>
-            </div>
-            <p style="font-size:0.8rem; margin-top:15px;">BAKİYE: <span id="balDisplay" style="color:var(--accent); font-weight:bold;">0</span> TL</p>
+        <div id="authPanel" class="auth-box" style="display: block; text-align: center;">
+            <h3 id="authTitle" style="font-family:'Orbitron';">HESAP OLUŞTUR</h3>
+            <input type="text" id="uName" placeholder="KULLANICI ADI">
+            <input type="password" id="uPass" placeholder="ŞİFRE">
+            <br><br>
+            <button onclick="handleAuth()" id="authBtn">KAYIT OL</button>
+            <p id="switchAuth" style="font-size:0.7rem; color:#444; cursor:pointer; margin-top:10px;" onclick="toggleAuthMode()">Zaten hesabın var mı? Giriş yap</p>
+        </div>
+
+        <div id="walletPanel" class="wallet-box" style="text-align: center;">
+            <h3 style="font-family:'Orbitron'; margin-top:0;">CÜZDAN</h3>
+            <p>BAKİYE: <span id="balanceVal" style="color:var(--accent); font-weight:bold;">0</span> TL</p>
+            <input type="text" id="redeemCode" placeholder="KOD GİR">
+            <button onclick="redeem()">YÜKLE</button>
+            <br><br>
+            <button onclick="logout()" style="background:transparent; color:#ff4444; font-size:0.6rem;">[ ÇIKIŞ YAP ]</button>
         </div>
 
         <div class="market-grid">
             <div class="market-card">
-                <span style="font-family:'Orbitron'; opacity:0.5;">FREE EDITION</span>
+                <b style="font-family:'Orbitron';">FREE</b>
                 <span class="price">0 TL</span>
-                <p style="color:#666;">Standart bypass ve temel özellikler.</p>
-                <a href="./RuseFree.jar" class="buy-btn" style="text-align:center;">İNDİR</a>
+                <a href="./RuseFree.jar" style="text-decoration:none;"><button style="width:100%;">İNDİR</button></a>
             </div>
-            <div class="market-card" style="border-color: #222;">
-                <span style="font-family:'Orbitron'; opacity:0.5;">PRO EDITION</span>
+            <div class="market-card">
+                <b style="font-family:'Orbitron';">PRO</b>
                 <span class="price">30 TL</span>
-                <p style="color:#666;">Haftalık full erişim ve anında update.</p>
-                <button class="buy-btn" onclick="buyPro()">SATIN AL</button>
+                <button onclick="buyPro()" style="width:100%;">SATIN AL</button>
             </div>
         </div>
     </div>
 
-    <div id="ekip" class="team-section">
-        <h2 style="font-family:'Orbitron'; text-align:center; letter-spacing:5px;">YÖNETİM EKİBİ</h2>
-        <div class="team-grid">
-            <div class="team-card"><span>KURUCU</span><b>Trickster</b><small>DC: ruse.pro</small></div>
-            <div class="team-card"><span>ORTAK</span><b>DarkMert</b><small>DC: darkmert1233</small></div>
-            <div class="team-card"><span>TASARIM</span><b>Xweeyz</b><small>DC: -</small></div>
-        </div>
+    <div class="team-grid">
+        <div class="t-card"><span>KURUCU</span><b>Trickster</b><small>ruse.pro</small></div>
+        <div class="t-card"><span>ORTAK</span><b>DarkMert</b><small>darkmert1233</small></div>
     </div>
-
-    <footer style="padding:40px; text-align:center; color:#222; font-size:0.8rem;">
-        &copy; 2026 RUSE.PRO | ALL RIGHTS RESERVED.
-    </footer>
 
     <script>
-        let balance = parseInt(localStorage.getItem('userBal')) || 0;
-        let used = JSON.parse(localStorage.getItem('usedCodes')) || [];
-        document.getElementById('balDisplay').innerText = balance;
+        let isLoginMode = false;
+
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            document.getElementById('authTitle').innerText = isLoginMode ? "GİRİŞ YAP" : "HESAP OLUŞTUR";
+            document.getElementById('authBtn').innerText = isLoginMode ? "GİRİŞ YAP" : "KAYIT OL";
+            document.getElementById('switchAuth').innerText = isLoginMode ? "Hesabın yok mu? Kayıt ol" : "Zaten hesabın var mı? Giriş yap";
+        }
+
+        function handleAuth() {
+            const user = document.getElementById('uName').value.trim();
+            const pass = document.getElementById('uPass').value.trim();
+
+            if(!user || !pass) return alert("Boş alan bırakma!");
+
+            if(isLoginMode) {
+                if(user === localStorage.getItem('ruse_user') && pass === localStorage.getItem('ruse_pass')) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    location.reload();
+                } else { alert("Hatalı bilgiler!"); }
+            } else {
+                localStorage.setItem('ruse_user', user);
+                localStorage.setItem('ruse_pass', pass);
+                localStorage.setItem('ruse_bal', '0');
+                localStorage.setItem('ruse_used', JSON.stringify([]));
+                alert("Kayıt başarılı! Şimdi giriş yap.");
+                toggleAuthMode();
+            }
+        }
 
         function redeem() {
             const input = document.getElementById('redeemCode');
             const code = input.value.trim().toUpperCase();
-            if(used.includes(code)) return alert('Bu kod zaten kullanılmış!');
+            let bal = parseInt(localStorage.getItem('ruse_bal')) || 0;
+            let used = JSON.parse(localStorage.getItem('ruse_used')) || [];
 
-            const codes = {
-                "İLKHİLEM":1, "ABONE":1, "RUSEPRO":5, "TRİCKSTER":10, 
-                "DARKMERTATOM":10, "YOUTUBE":2, "DİSCORD":2, "30TLÖDE":30
-            };
+            if(used.includes(code)) return alert("Bu kod kullanılmış!");
+
+            const codes = {"İLKHİLEM":1, "ABONE":1, "TRİCKSTER":10, "DARKMERTATOM":10, "30TLÖDE":30};
 
             if(codes[code]) {
-                balance += codes[code];
+                bal += codes[code];
                 used.push(code);
-                localStorage.setItem('userBal', balance);
-                localStorage.setItem('usedCodes', JSON.stringify(used));
-                alert(codes[code] + ' TL başarıyla yüklendi!');
+                localStorage.setItem('ruse_bal', bal);
+                localStorage.setItem('ruse_used', JSON.stringify(used));
+                alert(codes[code] + " TL yüklendi!");
                 location.reload();
-            } else {
-                alert('Geçersiz kod!');
-            }
+            } else { alert("Geçersiz kod!"); }
         }
 
         function buyPro() {
-            if(balance >= 30) {
-                balance -= 30;
-                localStorage.setItem('userBal', balance);
-                alert('PRO başarıyla satın alındı! İndirme linki açılıyor...');
-                window.location.href = "./RusePro.jar";
-            } else {
-                alert('Yetersiz bakiye! Kod bozdurarak bakiye yükleyin.');
+            let bal = parseInt(localStorage.getItem('ruse_bal')) || 0;
+            if(localStorage.getItem('isLoggedIn') !== 'true') return alert("Önce giriş yap!");
+            if(bal >= 30) {
+                bal -= 30;
+                localStorage.setItem('ruse_bal', bal);
+                alert("PRO satın alındı!");
+                location.reload();
+            } else { alert("Bakiye yetersiz!"); }
+        }
+
+        function logout() {
+            localStorage.setItem('isLoggedIn', 'false');
+            location.reload();
+        }
+
+        // F5 ATINCA VERİLERİ ÇEKEN KISIM
+        window.onload = function() {
+            if(localStorage.getItem('isLoggedIn') === 'true') {
+                document.getElementById('authPanel').style.display = 'none';
+                document.getElementById('walletPanel').style.display = 'block';
+                document.getElementById('balanceVal').innerText = localStorage.getItem('ruse_bal');
+                document.getElementById('userStatus').innerText = "HOŞ GELDİN, " + localStorage.getItem('ruse_user').toUpperCase();
             }
         }
     </script>
