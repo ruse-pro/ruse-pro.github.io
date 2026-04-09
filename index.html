@@ -7,156 +7,186 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root { --accent: #00ff88; --bg: #000; --card: #0a0a0a; }
-        body { background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow-x: hidden; scroll-behavior: smooth; }
+        body { background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow-x: hidden; }
         
         /* Navbar */
         .navbar { padding: 15px 10%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #111; background: rgba(0,0,0,0.9); position: sticky; top: 0; z-index: 1000; }
         
-        /* Başarı Ekranı */
+        /* Başarı Onay Ekranı */
         .success-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; text-align: center; }
-        .success-overlay h1 { font-family: 'Orbitron'; font-size: 4rem; color: var(--accent); text-shadow: 0 0 20px var(--accent); margin-bottom: 20px; }
+        .success-overlay h1 { font-family: 'Orbitron'; font-size: 4rem; color: var(--accent); text-shadow: 0 0 20px var(--accent); }
         
-        /* Ana Konteynır */
-        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
-        .panel { background: var(--card); border: 1px solid #1a1a1a; padding: 40px; border-radius: 15px; text-align: center; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .panel { background: var(--card); border: 1px solid #1a1a1a; padding: 30px; border-radius: 12px; text-align: center; margin-bottom: 25px; }
         
-        input { background: #000; border: 1px solid #222; padding: 15px; color: #fff; font-family: 'Orbitron'; outline: none; margin: 5px; width: 280px; text-align: center; border-radius: 5px; }
-        button { background: #fff; color: #000; border: none; padding: 15px 30px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; transition: 0.3s; border-radius: 5px; }
+        input { background: #000; border: 1px solid #222; padding: 12px; color: #fff; font-family: 'Orbitron'; outline: none; margin: 5px; width: 250px; text-align: center; }
+        button { background: #fff; color: #000; border: none; padding: 12px 25px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; transition: 0.3s; }
         button:hover { background: var(--accent); transform: scale(1.05); }
 
-        /* Ekip Kartları */
-        .team-grid { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; padding: 50px 0; }
-        .team-card { background: #080808; border: 2px solid #111; padding: 50px; width: 320px; border-radius: 20px; text-align: center; transition: 0.4s; }
-        .team-card:hover { border-color: var(--accent); background: #000; }
-        .team-card b { display: block; font-family: 'Orbitron'; font-size: 2.2rem; margin-bottom: 10px; }
-        .dc-info { color: #5865F2; font-family: 'Orbitron'; font-weight: bold; font-size: 0.9rem; margin-top: 15px; display: block; }
+        .team-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 40px; }
+        .t-card { background: #080808; border: 1px solid #1a1a1a; padding: 30px; width: 220px; border-radius: 10px; text-align: center; }
+        .t-card b { display: block; font-family: 'Orbitron'; font-size: 1.5rem; color: #fff; }
 
-        /* Gizli Alan */
-        #adminSection { display: none; }
+        #adminSection, #walletSection { display: none; }
     </style>
 </head>
 <body>
 
     <div id="successScreen" class="success-overlay">
         <h1>İŞLEM TAMAM!</h1>
-        <p id="successDetail" style="font-size: 1.5rem; margin-bottom: 30px; color: #888;"></p>
-        <button onclick="closeSuccess()">SİSTEME DÖN</button>
+        <p id="successDetail" style="font-size: 1.5rem; margin-bottom: 30px;"></p>
+        <button onclick="closeSuccess()">DEVAM ET</button>
     </div>
 
-    <div id="mainPage">
-        <div class="navbar">
-            <div style="font-family:'Orbitron'; font-weight:bold; letter-spacing:2px; font-size: 1.5rem;">RUSE<span style="color:var(--accent);">.PRO</span></div>
-            <div id="balTag" style="font-family:'Orbitron'; color:var(--accent); font-weight: bold;">BAKİYE: 0 TL</div>
-        </div>
-
-        <div class="container">
-            <div class="panel">
-                <h1 style="font-family:'Orbitron'; letter-spacing: 15px; font-size: 3.5rem; margin: 0;">RUSE.PRO</h1>
-                <p style="color:#444; letter-spacing: 4px; font-weight: bold; margin-bottom: 40px;">YOU DON'T NEED TO PLAY WELL.</p>
-                
-                <div style="padding: 20px; border-top: 1px solid #111;">
-                    <input type="text" id="redeemInput" placeholder="BAKİYE KODUNU GİR">
-                    <button onclick="redeem()">KODU BOZDUR</button>
-                </div>
-            </div>
-
-            <div id="ekip" class="team-grid">
-                <div class="team-card">
-                    <span style="color:var(--accent); font-size: 0.7rem; letter-spacing: 3px;">KURUCU</span>
-                    <b>Trickster</b>
-                    <span class="dc-info">Discord: ruse.pro</span>
-                </div>
-                <div class="team-card">
-                    <span style="color:var(--accent); font-size: 0.7rem; letter-spacing: 3px;">KURUCU ORTAK</span>
-                    <b>DarkMertatom</b>
-                    <span class="dc-info">Discord: darkmert1233</span>
-                </div>
-            </div>
-        </div>
+    <div class="navbar">
+        <div style="font-family:'Orbitron'; font-weight:bold; letter-spacing:2px;">RUSE.PRO</div>
+        <div id="userStatus" style="font-family:'Orbitron'; font-size:0.8rem; color:var(--accent);">GİRİŞ GEREKLİ</div>
     </div>
 
-    <div id="adminSection">
-        <div class="navbar">
-            <div style="font-family:'Orbitron'; color: var(--accent);">RUSE.PRO // GİZLİ PANEL</div>
-            <button onclick="window.location.hash=''" style="padding:5px 10px; font-size:0.6rem;">ÇIKIŞ YAP</button>
+    <div class="container">
+        <div id="authSection" class="panel">
+            <h2 id="authTitle" style="font-family:'Orbitron'">HESAP OLUŞTUR</h2>
+            <input type="text" id="uName" placeholder="KULLANICI ADI">
+            <input type="password" id="uPass" placeholder="ŞİFRE">
+            <br><br>
+            <button onclick="handleAuth()" id="authBtn">KAYIT OL</button>
+            <p onclick="toggleAuth()" id="switchAuth" style="font-size:0.7rem; color:#444; cursor:pointer; margin-top:15px;">Zaten hesabın var mı? Giriş yap</p>
         </div>
-        <div class="container">
-            <div class="panel" style="border: 2px solid var(--accent);">
-                <h2 style="font-family:'Orbitron'; margin-bottom: 30px;">KOD ÜRETİCİ (SPOILER MODU)</h2>
-                <input type="number" id="genAmount" placeholder="TL MİKTARI">
-                <button onclick="generateAndSend()" style="background: var(--accent);">ÜRET VE DC'YE GÖNDER</button>
-            </div>
+
+        <div id="walletSection" class="panel">
+            <h2 style="font-family:'Orbitron'">BAKİYE: <span id="balDisplay" style="color:var(--accent)">0</span> TL</h2>
+            <input type="text" id="redeemInput" placeholder="KODUNU GİR">
+            <button onclick="redeem()">BOZDUR</button>
+            <br><br>
+            <button onclick="logout()" style="background:transparent; color:#ff4444; font-size:0.6rem;">[ ÇIKIŞ YAP ]</button>
+        </div>
+
+        <div id="adminSection" class="panel" style="border-color: var(--accent)">
+            <h2 style="font-family:'Orbitron'">KOD ÜRETİCİ</h2>
+            <input type="number" id="genAmount" placeholder="TL MİKTARI">
+            <button onclick="generateAndSend()" style="background:var(--accent)">ÜRET VE DC'YE AT</button>
+        </div>
+
+        <div class="team-grid">
+            <div class="t-card"><span>KURUCU</span><b>Trickster</b><small>ruse.pro</small></div>
+            <div class="t-card"><span>ORTAK</span><b>DarkMertatom</b><small>darkmert1233</small></div>
         </div>
     </div>
 
     <script>
         const WH = "https://discord.com/api/webhooks/1491501294920401017/FFsIOxHwhyE1cSzWXPiKJJIHESAkzxfDI7oizQG15SW-nN6V4jxpTMf8YO9GPZooW6Ct";
-        const ADMIN_PASS = "ruse.admin.1234"; // Yeni Şifre
+        const ADMIN_PASS = "ruse.admin.1234";
 
-        let balance = parseInt(localStorage.getItem('ruse_bal')) || 0;
-        let used = JSON.parse(localStorage.getItem('ruse_used')) || [];
+        let isLoginMode = false;
 
-        window.onload = checkRoute;
+        // SAYFA YÜKLENİNCE: GÜNCELLEME MESAJI VE VERİ KONTROLÜ
+        window.onload = function() {
+            // Discord Güncelleme Mesajı Gönder
+            if (!sessionStorage.getItem('notified')) {
+                fetch(WH, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ content: "Değerli Adminlerimiz Sitemiz Güncellenmiştir! !||@everyone||" })
+                });
+                sessionStorage.setItem('notified', 'true');
+            }
+            checkRoute();
+        };
+
         window.onhashchange = checkRoute;
 
         function checkRoute() {
             if(window.location.hash === "#kod") {
-                let p = prompt("Yönetici Şifresi Girin:");
+                let p = prompt("Yönetici Şifresi:");
                 if(p === ADMIN_PASS) {
-                    document.getElementById('mainPage').style.display = 'none';
+                    document.getElementById('authSection').style.display = 'none';
+                    document.getElementById('walletSection').style.display = 'none';
                     document.getElementById('adminSection').style.display = 'block';
-                } else {
-                    alert("Hatalı Şifre!");
-                    window.location.hash = "";
-                }
+                } else { window.location.hash = ""; }
             } else {
-                document.getElementById('mainPage').style.display = 'block';
-                document.getElementById('adminSection').style.display = 'none';
-                document.getElementById('balTag').innerText = "BAKİYE: " + balance + " TL";
+                updateUI();
             }
         }
 
-        function closeSuccess() { document.getElementById('successScreen').style.display = 'none'; location.reload(); }
+        function toggleAuth() {
+            isLoginMode = !isLoginMode;
+            document.getElementById('authTitle').innerText = isLoginMode ? "GİRİŞ YAP" : "HESAP OLUŞTUR";
+            document.getElementById('authBtn').innerText = isLoginMode ? "GİRİŞ YAP" : "KAYIT OL";
+            document.getElementById('switchAuth').innerText = isLoginMode ? "Hesabın yok mu? Kayıt ol" : "Zaten hesabın var mı? Giriş yap";
+        }
+
+        function handleAuth() {
+            const user = document.getElementById('uName').value.trim();
+            const pass = document.getElementById('uPass').value.trim();
+            if(!user || !pass) return alert("Boş bırakma!");
+
+            if(isLoginMode) {
+                if(user === localStorage.getItem('r_user') && pass === localStorage.getItem('r_pass')) {
+                    localStorage.setItem('isLogged', 'true');
+                    location.reload();
+                } else { alert("Hatalı bilgiler!"); }
+            } else {
+                localStorage.setItem('r_user', user);
+                localStorage.setItem('r_pass', pass);
+                localStorage.setItem('r_bal', '0');
+                localStorage.setItem('r_used', JSON.stringify([]));
+                alert("Kayıt başarılı! Giriş yapabilirsin.");
+                toggleAuth();
+            }
+        }
+
+        function updateUI() {
+            const logged = localStorage.getItem('isLogged') === 'true';
+            document.getElementById('authSection').style.display = logged ? 'none' : 'block';
+            document.getElementById('walletSection').style.display = logged ? 'block' : 'none';
+            if(logged) {
+                document.getElementById('balDisplay').innerText = localStorage.getItem('r_bal');
+                document.getElementById('userStatus').innerText = "HOŞ GELDİN, " + localStorage.getItem('r_user').toUpperCase();
+            }
+        }
 
         function redeem() {
             const code = document.getElementById('redeemInput').value.trim().toUpperCase();
-            if(used.includes(code)) return alert("Bu kod zaten kullanılmış!");
+            let bal = parseInt(localStorage.getItem('r_bal')) || 0;
+            let used = JSON.parse(localStorage.getItem('r_used')) || [];
+            let dynamic = JSON.parse(localStorage.getItem('ruse_dynamic_codes')) || {};
 
-            let dynamicCodes = JSON.parse(localStorage.getItem('ruse_dynamic_codes')) || {};
-            let amount = dynamicCodes[code];
-
-            if(amount) {
-                balance += amount;
+            if(used.includes(code)) return alert("Bu kod kullanılmış!");
+            
+            if(dynamic[code]) {
+                let amt = dynamic[code];
+                bal += amt;
                 used.push(code);
-                localStorage.setItem('ruse_bal', balance);
-                localStorage.setItem('ruse_used', JSON.stringify(used));
-                document.getElementById('successDetail').innerText = `+${amount} TL Tanımlandı.`;
+                localStorage.setItem('r_bal', bal);
+                localStorage.setItem('r_used', JSON.stringify(used));
+                document.getElementById('successDetail').innerText = `+${amt} TL Yüklendi!`;
                 document.getElementById('successScreen').style.display = 'flex';
-            } else { alert("Geçersiz Kod!"); }
+            } else { alert("Geçersiz kod!"); }
         }
 
         function generateAndSend() {
-            const amount = parseInt(document.getElementById('genAmount').value);
-            if(!amount) return alert("Miktar gir!");
-
-            const newCode = "RUSE-" + Math.random().toString(36).substr(2, 9).toUpperCase();
-            let dynamicCodes = JSON.parse(localStorage.getItem('ruse_dynamic_codes')) || {};
-            dynamicCodes[newCode] = amount;
-            localStorage.setItem('ruse_dynamic_codes', JSON.stringify(dynamicCodes));
+            const amt = parseInt(document.getElementById('genAmount').value);
+            if(!amt) return;
+            const code = "RUSE-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+            let dynamic = JSON.parse(localStorage.getItem('ruse_dynamic_codes')) || {};
+            dynamic[code] = amt;
+            localStorage.setItem('ruse_dynamic_codes', JSON.stringify(dynamic));
 
             fetch(WH, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     embeds: [{
-                        title: "🛠 YENİ KOD ÜRETİLDİ",
-                        description: `**Kod:** ||${newCode}||\n**Değer:** ${amount} TL`,
-                        color: 5763719,
-                        timestamp: new Date()
+                        title: "🛠 YENİ KOD",
+                        description: `**Kod:** ||${code}||\n**Miktar:** ${amt} TL`,
+                        color: 5763719
                     }]
                 })
-            }).then(() => alert("Kod Üretildi ve Spoiler olarak DC'ye gönderildi!"));
+            }).then(() => alert("Kod DC'ye spoiler olarak atıldı!"));
         }
+
+        function closeSuccess() { document.getElementById('successScreen').style.display = 'none'; location.reload(); }
+        function logout() { localStorage.setItem('isLogged', 'false'); location.reload(); }
     </script>
 </body>
 </html>
