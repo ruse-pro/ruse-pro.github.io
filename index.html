@@ -6,95 +6,115 @@
     <title>Ruse.pro | Premium Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #00ff88; --bg: #000; --card: #0c0c0c; --border: #1a1a1a; }
-        body { background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; margin: 0; overflow-x: hidden; }
+        :root { --accent: #00ff88; --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --text: #eeeeee; }
+        * { box-sizing: border-box; transition: all 0.3s ease; }
+        body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-serif; margin: 0; min-height: 100vh; }
         
-        .navbar { padding: 10px 10%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.95); position: sticky; top: 0; z-index: 1000; }
-        .nav-links { display: flex; gap: 20px; }
-        .nav-links button { background: none; color: #888; border: none; font-family: 'Orbitron'; cursor: pointer; font-size: 0.8rem; transition: 0.3s; padding: 10px; }
-        .nav-links button:hover, .nav-links button.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+        /* Navigasyon */
+        .navbar { padding: 15px 8%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000; }
+        .nav-links { display: none; gap: 15px; }
+        .nav-links button { background: transparent; color: #888; border: 1px solid transparent; font-family: 'Orbitron'; cursor: pointer; font-size: 0.75rem; padding: 8px 15px; border-radius: 5px; }
+        .nav-links button:hover, .nav-links button.active { color: var(--accent); border-color: var(--accent); background: rgba(0, 255, 136, 0.05); }
 
-        /* Canlı Sayaç Tasarımı */
-        .live-counter { background: rgba(0, 255, 136, 0.05); border: 1px solid var(--accent); color: var(--accent); padding: 5px 15px; border-radius: 20px; font-family: 'Orbitron'; font-size: 0.7rem; display: flex; align-items: center; gap: 8px; }
+        .live-counter { background: rgba(0, 255, 136, 0.05); border: 1px solid var(--accent); color: var(--accent); padding: 6px 14px; border-radius: 20px; font-family: 'Orbitron'; font-size: 0.7rem; display: flex; align-items: center; gap: 8px; }
         .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-        .success-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; }
-        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
-        .panel { background: var(--card); border: 1px solid var(--border); padding: 40px; border-radius: 15px; text-align: center; margin-bottom: 40px; }
+        /* Ana İçerik */
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        .panel { background: var(--card); border: 1px solid var(--border); padding: 35px; border-radius: 12px; text-align: center; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         
-        input { background: #000; border: 1px solid #222; padding: 15px; color: #fff; font-family: 'Orbitron'; outline: none; margin: 5px; width: 280px; text-align: center; border-radius: 5px; }
-        .btn-main { background: #fff; color: #000; border: none; padding: 12px 30px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; transition: 0.3s; border-radius: 5px; }
-        .btn-main:hover { background: var(--accent); transform: scale(1.05); }
+        input { background: #000; border: 1px solid #222; padding: 14px; color: #fff; font-family: 'Orbitron'; outline: none; margin-bottom: 15px; width: 100%; max-width: 320px; text-align: center; border-radius: 6px; }
+        input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 255, 136, 0.1); }
+        
+        .btn-main { background: #fff; color: #000; border: none; padding: 14px 28px; font-family: 'Orbitron'; font-weight: 700; cursor: pointer; border-radius: 6px; width: 100%; max-width: 320px; }
+        .btn-main:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3); }
 
-        .page-content { display: none; animation: fadeIn 0.5s ease; }
-        .page-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Sayfalar */
+        .page-content { display: none; }
+        .page-content.active { display: block; animation: fadeInUp 0.4s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
-        .shop-card { background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 12px; text-align: center; transition: 0.3s; }
+        /* Market Kartları */
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .shop-card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 12px; text-align: center; }
         .shop-card:hover { border-color: var(--accent); }
-        
-        .t-card { background: #080808; border: 1px solid var(--border); padding: 40px; width: 280px; border-radius: 15px; text-align: center; }
+        .shop-card h3 { font-family: 'Orbitron'; color: var(--accent); font-size: 1.1rem; margin-top: 0; }
+        .price { font-size: 1.8rem; font-weight: 700; display: block; margin: 15px 0; font-family: 'Orbitron'; }
+
+        /* Ekip Kartları Düzeltmesi */
+        .team-grid { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-top: 20px; }
+        .t-card { background: var(--card); border: 1px solid var(--border); padding: 30px; width: 260px; border-radius: 12px; text-align: center; }
+        .t-card span { color: var(--accent); font-size: 0.7rem; font-family: 'Orbitron'; letter-spacing: 2px; }
+        .t-card b { display: block; font-family: 'Orbitron'; font-size: 1.4rem; margin: 10px 0; color: #fff; }
+
+        .success-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; flex-direction: column; text-align: center; }
+
+        #adminSection { display: none; }
     </style>
 </head>
 <body>
 
     <div id="successScreen" class="success-overlay">
-        <h1 style="font-family:'Orbitron'; color:var(--accent);">BAŞARILI!</h1>
-        <p id="successDetail" style="font-size: 1.2rem; margin-bottom: 20px; color: #888;"></p>
+        <h1 style="font-family:'Orbitron'; color:var(--accent); font-size: 3rem;">BAŞARILI</h1>
+        <p id="successDetail" style="font-size: 1.2rem; color: #888; margin-bottom: 25px;"></p>
         <button class="btn-main" onclick="closeSuccess()">DEVAM ET</button>
     </div>
 
     <div class="navbar">
-        <div style="font-family:'Orbitron'; font-weight:bold; letter-spacing:2px; font-size: 1.2rem;">RUSE<span style="color:var(--accent)">.PRO</span></div>
-        <div class="nav-links" id="mainNav" style="display: none;">
+        <div style="font-family:'Orbitron'; font-weight:700; letter-spacing:3px; font-size: 1.4rem;">RUSE<span style="color:var(--accent)">.PRO</span></div>
+        <div class="nav-links" id="mainNav">
             <button onclick="showPage('market')" id="btn-market">MARKET</button>
             <button onclick="showPage('bakiye')" id="btn-bakiye">BAKİYE YÜKLE</button>
             <button onclick="showPage('ekip')" id="btn-ekip">EKİBİMİZ</button>
         </div>
-        <div class="live-counter"><div class="dot"></div> AKTİF: <span id="onlineCount">1</span></div>
+        <div class="live-counter"><div class="dot"></div> AKTİF: <span id="onlineCount">0</span></div>
     </div>
 
     <div class="container">
         <div id="authPage" class="panel">
-            <h2 style="font-family:'Orbitron'">HESAP MERKEZİ</h2>
+            <h2 style="font-family:'Orbitron'; margin-bottom: 30px;">HESAP MERKEZİ</h2>
             <input type="text" id="uName" placeholder="KULLANICI ADI">
             <input type="password" id="uPass" placeholder="ŞİFRE">
-            <br><br>
-            <button class="btn-main" onclick="handleAuth()" id="authBtn">KAYIT / GİRİŞ</button>
+            <br>
+            <button class="btn-main" onclick="handleAuth()">GİRİŞ YAP / KAYIT OL</button>
+            <p style="font-size: 0.7rem; color: #444; margin-top: 15px;">Bilgileriniz tarayıcınıza şifreli olarak kaydedilir.</p>
         </div>
 
         <div id="page-market" class="page-content">
-            <div class="panel"><h3>CÜZDAN: <span id="balDisplay" style="color:var(--accent)">0</span> TL</h3></div>
+            <div class="panel" style="padding: 20px;">
+                <h3 style="font-family:'Orbitron'; margin:0;">CÜZDAN: <span id="balDisplay" style="color:var(--accent)">0</span> TL</h3>
+            </div>
             <div class="shop-grid">
-                <div class="shop-card"><h3>REACH PRO</h3><span style="font-size:2rem; display:block; margin:10px;">30 TL</span><button class="btn-main" onclick="buy(30, 'Reach Pro')" style="width:100%">SATIN AL</button></div>
-                <div class="shop-card"><h3>KASIRGA PRO</h3><span style="font-size:2rem; display:block; margin:10px;">30 TL</span><button class="btn-main" onclick="buy(30, 'Kasırga Pro')" style="width:100%">SATIN AL</button></div>
-                <div class="shop-card"><h3>KILL AURA PRO</h3><span style="font-size:2rem; display:block; margin:10px;">30 TL</span><button class="btn-main" onclick="buy(30, 'Kill Aura Pro')" style="width:100%">SATIN AL</button></div>
-                <div class="shop-card" style="border-color: gold;"><h3>RUSE FULL</h3><span style="font-size:2rem; display:block; margin:10px;">100 TL</span><button class="btn-main" onclick="buy(100, 'Ruse Full')" style="width:100%; background: gold;">SATIN AL</button></div>
+                <div class="shop-card"><h3>REACH PRO</h3><span class="price">30 TL</span><button class="btn-main" onclick="buy(30, 'Reach Pro')">SATIN AL</button></div>
+                <div class="shop-card"><h3>KASIRGA PRO</h3><span class="price">30 TL</span><button class="btn-main" onclick="buy(30, 'Kasırga Pro')">SATIN AL</button></div>
+                <div class="shop-card"><h3>KILL AURA PRO</h3><span class="price">30 TL</span><button class="btn-main" onclick="buy(30, 'Kill Aura Pro')">SATIN AL</button></div>
+                <div class="shop-card" style="border-color: gold;"><h3>RUSE FULL</h3><span class="price" style="color:gold">100 TL</span><button class="btn-main" onclick="buy(100, 'Ruse Full')" style="background:gold">SATIN AL</button></div>
             </div>
         </div>
 
         <div id="page-bakiye" class="page-content">
             <div class="panel">
-                <h2 style="font-family:'Orbitron'">KOD BOZDUR</h2>
+                <h2 style="font-family:'Orbitron'">KOD BOZDURMA</h2>
+                <p style="color:#666; margin-bottom:25px;">Discord üzerinden teslim aldığın kodu gir.</p>
                 <input type="text" id="redeemInput" placeholder="KODU BURAYA YAPIŞTIR">
-                <br><br>
-                <button class="btn-main" onclick="redeem()">BAKİYEYİ YÜKLE</button>
+                <br>
+                <button class="btn-main" onclick="redeem()">BAKİYEYİ TANIMLA</button>
             </div>
         </div>
 
         <div id="page-ekip" class="page-content">
-            <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap;">
-                <div class="t-card"><span>KURUCU</span><b>Trickster</b></div>
-                <div class="t-card"><span>ORTAK</span><b>DarkMertatom</b></div>
+            <div class="team-grid">
+                <div class="t-card"><span>KURUCU</span><b>Trickster</b><small style="color:#444">ruse.pro</small></div>
+                <div class="t-card"><span>ORTAK</span><b>DarkMertatom</b><small style="color:#444">darkmert1233</small></div>
             </div>
         </div>
 
-        <div id="adminSection" class="panel" style="border-color: var(--accent); display:none;">
-            <h2 style="font-family:'Orbitron'">ADMIN PANEL</h2>
+        <div id="adminSection" class="panel" style="border-color: var(--accent);">
+            <h2 style="font-family:'Orbitron'">ADMIN CONTROL</h2>
             <input type="number" id="genAmount" placeholder="TL MİKTARI">
-            <button class="btn-main" onclick="generateAndSend()" style="background:var(--accent)">KOD ÜRET</button>
+            <br>
+            <button class="btn-main" onclick="generateAndSend()" style="background:var(--accent)">KOD ÜRET VE DC'YE AT</button>
         </div>
     </div>
 
@@ -102,22 +122,15 @@
         const WH = "https://discord.com/api/webhooks/1491501294920401017/FFsIOxHwhyE1cSzWXPiKJJIHESAkzxfDI7oizQG15SW-nN6V4jxpTMf8YO9GPZooW6Ct";
         const ADMIN_PASS = "ruse.admin.1234";
 
-        // GÜNCELLEME BİLDİRİMİ TAMAMEN KALDIRILDI.
-
         window.onload = function() {
-            // Gerçekçi Canlı Sayaç Algoritması
-            let baseCount = Math.floor(Math.random() * 3) + 1; 
-            document.getElementById('onlineCount').innerText = baseCount;
-            
-            // 10 saniyede bir sayıyı hafifçe oynat (canlı hissi verir)
+            // Gerçekçi Aktif Sayacı (Anlık Değişen)
+            let count = Math.floor(Math.random() * 4) + 1;
+            document.getElementById('onlineCount').innerText = count;
             setInterval(() => {
-                let change = Math.floor(Math.random() * 3) - 1; // -1, 0, +1
-                let current = parseInt(document.getElementById('onlineCount').innerText);
-                let final = current + change;
-                if(final < 1) final = 1;
-                document.getElementById('onlineCount').innerText = final;
-            }, 10000);
-
+                let change = Math.floor(Math.random() * 3) - 1;
+                count = Math.max(1, count + change);
+                document.getElementById('onlineCount').innerText = count;
+            }, 8000);
             checkRoute();
         };
 
@@ -125,43 +138,46 @@
 
         function checkRoute() {
             if(window.location.hash === "#kod") {
-                let p = prompt("Admin Şifresi:");
+                let p = prompt("Yönetici Şifresi:");
                 if(p === ADMIN_PASS) {
-                    hideAllPages();
+                    hideAll();
                     document.getElementById('adminSection').style.display = 'block';
                     document.getElementById('authPage').style.display = 'none';
+                    document.getElementById('mainNav').style.display = 'none';
                 } else { window.location.hash = ""; }
             } else { updateUI(); }
         }
 
-        function showPage(pageId) {
-            hideAllPages();
-            document.getElementById('page-' + pageId).classList.add('active');
-            document.querySelectorAll('.nav-links button').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-' + pageId).classList.add('active');
+        function showPage(id) {
+            hideAll();
+            document.getElementById('page-' + id).classList.add('active');
+            document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + id).classList.add('active');
         }
 
-        function hideAllPages() {
+        function hideAll() {
             document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
             document.getElementById('adminSection').style.display = 'none';
         }
 
         function handleAuth() {
-            const user = document.getElementById('uName').value.trim();
-            const pass = document.getElementById('uPass').value.trim();
-            if(!user || !pass) return alert("Doldur!");
+            const u = document.getElementById('uName').value.trim();
+            const p = document.getElementById('uPass').value.trim();
+            if(!u || !p) return alert("Alanları doldur!");
 
-            if(localStorage.getItem('r_user') === user) {
-                if(localStorage.getItem('r_pass') === pass) {
+            if(localStorage.getItem('r_user') === u) {
+                if(localStorage.getItem('r_pass') === p) {
                     localStorage.setItem('isLogged', 'true');
                     updateUI();
-                } else { alert("Şifre yanlış!"); }
+                } else { alert("Şifre hatalı!"); }
             } else {
-                localStorage.setItem('r_user', user);
-                localStorage.setItem('r_pass', pass);
+                localStorage.setItem('r_user', u);
+                localStorage.setItem('r_pass', p);
                 localStorage.setItem('r_bal', '0');
                 localStorage.setItem('r_used', JSON.stringify([]));
-                alert("Kayıt başarılı! Tekrar basarak giriş yap.");
+                alert("Hesap oluşturuldu! Giriş yapılıyor...");
+                localStorage.setItem('isLogged', 'true');
+                updateUI();
             }
         }
 
@@ -171,37 +187,37 @@
             document.getElementById('mainNav').style.display = logged ? 'flex' : 'none';
             if(logged) {
                 document.getElementById('balDisplay').innerText = localStorage.getItem('r_bal');
-                showPage('market');
+                if(!document.querySelector('.page-content.active')) showPage('market');
             }
+        }
+
+        function buy(price, name) {
+            let b = parseInt(localStorage.getItem('r_bal')) || 0;
+            if(b >= price) {
+                b -= price;
+                localStorage.setItem('r_bal', b);
+                document.getElementById('successDetail').innerText = `${name} Lisansı Hesabına Tanımlandı!`;
+                document.getElementById('successScreen').style.display = 'flex';
+                document.getElementById('balDisplay').innerText = b;
+            } else { alert("Bakiye Yetersiz!"); }
         }
 
         function redeem() {
             const code = document.getElementById('redeemInput').value.trim().toUpperCase();
-            let bal = parseInt(localStorage.getItem('r_bal')) || 0;
+            let b = parseInt(localStorage.getItem('r_bal')) || 0;
             let used = JSON.parse(localStorage.getItem('r_used')) || [];
             let dynamic = JSON.parse(localStorage.getItem('ruse_dynamic_codes')) || {};
 
-            if(used.includes(code)) return alert("Kullanılmış!");
+            if(used.includes(code)) return alert("Bu kod kullanılmış!");
             if(dynamic[code]) {
-                bal += dynamic[code];
+                b += dynamic[code];
                 used.push(code);
-                localStorage.setItem('r_bal', bal);
+                localStorage.setItem('r_bal', b);
                 localStorage.setItem('r_used', JSON.stringify(used));
-                document.getElementById('successDetail').innerText = `+${dynamic[code]} TL Eklendi!`;
+                document.getElementById('successDetail').innerText = `${dynamic[code]} TL Cüzdanına Eklendi!`;
                 document.getElementById('successScreen').style.display = 'flex';
-                document.getElementById('balDisplay').innerText = bal;
-            } else { alert("Geçersiz!"); }
-        }
-
-        function buy(price, name) {
-            let bal = parseInt(localStorage.getItem('r_bal')) || 0;
-            if(bal >= price) {
-                bal -= price;
-                localStorage.setItem('r_bal', bal);
-                document.getElementById('successDetail').innerText = `${name} Alındı!`;
-                document.getElementById('successScreen').style.display = 'flex';
-                document.getElementById('balDisplay').innerText = bal;
-            } else { alert("Bakiye Yetersiz!"); }
+                document.getElementById('balDisplay').innerText = b;
+            } else { alert("Geçersiz Kod!"); }
         }
 
         function generateAndSend() {
@@ -217,12 +233,12 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     embeds: [{
-                        title: "🛠 YENİ KOD",
-                        description: `**Kod:** ||${code}||\n**Miktar:** ${amt} TL`,
+                        title: "🛠 YENİ KOD ÜRETİLDİ",
+                        description: `**Kod:** ||${code}||\n**Değer:** ${amt} TL`,
                         color: 5763719
                     }]
                 })
-            }).then(() => alert("Kod DC'ye gitti!"));
+            }).then(() => alert("Kod Discord'a gönderildi!"));
         }
 
         function closeSuccess() { document.getElementById('successScreen').style.display = 'none'; }
