@@ -18,7 +18,7 @@
         .panel { background: var(--panel); border: 1px solid var(--border); padding: 40px; border-radius: 8px; text-align: center; }
         
         input { background: #000; border: 1px solid #333; padding: 12px; color: #fff; font-family: 'Orbitron'; width: 100%; max-width: 350px; text-align: center; border-radius: 4px; margin-bottom: 12px; outline: none; }
-        .btn { background: #eee; color: #000; border: none; padding: 12px 25px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; border-radius: 4px; width: 100%; max-width: 350px; }
+        .btn { background: #eee; color: #000; border: none; padding: 12px 25px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; border-radius: 4px; width: 100%; max-width: 350px; text-decoration: none; display: inline-block; }
         .btn:hover { background: var(--accent); transform: translateY(-2px); }
 
         .page { display: none; }
@@ -27,46 +27,58 @@
 
         .card { background: #151515; border: 1px solid var(--border); padding: 30px; border-radius: 8px; text-align: center; margin-top: 20px; }
         .price { font-size: 2.5rem; display: block; margin: 20px 0; font-family: 'Orbitron'; color: var(--accent); }
-
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; text-align: center; }
+        
+        .link-text { color: var(--accent); cursor: pointer; text-decoration: underline; font-size: 0.8rem; margin-top: 10px; display: inline-block; }
     </style>
 </head>
 <body>
 
-    <div id="dlScreen" class="overlay">
-        <h1 style="font-family:'Orbitron'; color:var(--accent);">ÖDEME ONAYLANDI</h1>
-        <p style="margin-bottom: 25px; color: #888;">Ruse.pro Client indirilmeye hazır.</p>
-        <a href="https://senin-siten.com/dosyalar/ruse_pro.jar" download class="btn" style="text-decoration:none; background:var(--accent); display:inline-block; line-height:1.2;">İNDİR (.JAR)</a>
-        <br><br>
-        <button class="btn" onclick="document.getElementById('dlScreen').style.display='none'" style="background:transparent; color:#555; border:1px solid #333;">KAPAT</button>
-    </div>
-
     <div class="navbar">
         <div style="font-family:'Orbitron'; font-weight:700; letter-spacing:2px; color: var(--accent);">RUSE.PRO</div>
         <div class="nav-links" id="mainMenu" style="display:none">
-            <button onclick="show('shop')" id="b-shop">MAĞAZA</button>
-            <button onclick="show('wallet')" id="b-wallet">CÜZDAN</button>
-            <button onclick="show('team')" id="b-team">EKİP</button>
+            <button onclick="showPage('shop')" id="b-shop">MAĞAZA</button>
+            <button onclick="showPage('library')" id="b-library">HESABIM</button>
+            <button onclick="showPage('wallet')" id="b-wallet">CÜZDAN</button>
+            <button onclick="logout()" style="color: #ff4444;">ÇIKIŞ</button>
         </div>
     </div>
 
     <div class="container">
-        <div id="authBox" class="panel">
-            <h2 style="font-family:'Orbitron'; margin-bottom:25px;">GİRİŞ / KAYIT</h2>
-            <input type="email" id="regEmail" placeholder="E-POSTA ADRESİ"><br>
-            <input type="text" id="regUser" placeholder="KULLANICI ADI"><br>
-            <input type="password" id="regPass" placeholder="ŞİFRE"><br>
-            <button class="btn" onclick="handleAuth()">SİSTEME GİR</button>
+        <div id="loginBox" class="panel page">
+            <h2 style="font-family:'Orbitron'">GİRİŞ YAP</h2>
+            <input type="text" id="lUser" placeholder="KULLANICI ADI"><br>
+            <input type="password" id="lPass" placeholder="ŞİFRE"><br>
+            <button class="btn" onclick="login()">GİRİŞ</button><br>
+            <span class="link-text" onclick="showAuth('registerBox')">Kayıtlı değil misin? Kayıt ol</span>
+        </div>
+
+        <div id="registerBox" class="panel page">
+            <h2 style="font-family:'Orbitron'">KAYIT OL</h2>
+            <input type="email" id="rMail" placeholder="E-POSTA"><br>
+            <input type="text" id="rUser" placeholder="KULLANICI ADI"><br>
+            <input type="password" id="rPass" placeholder="ŞİFRE"><br>
+            <button class="btn" onclick="register()">KAYIT OL</button><br>
+            <span class="link-text" onclick="showAuth('loginBox')">Zaten hesabın var mı? Giriş yap</span>
         </div>
 
         <div id="p-shop" class="page">
             <div class="panel" style="padding:15px; margin-bottom:20px;">
-                <p style="margin:0; font-family:'Orbitron'">BAKİYE: <span id="userBal" style="color:var(--accent)">0</span> TL</p>
+                <p style="margin:0; font-family:'Orbitron'">CÜZDAN: <span id="userBal" style="color:var(--accent)">0</span> TL</p>
             </div>
             <div class="card">
-                <h2 style="font-family:'Orbitron'; margin:10px 0;">RUSE.PRO FULL ACCESS</h2>
+                <h2 style="font-family:'Orbitron'">RUSE.PRO FULL ACCESS</h2>
                 <span class="price">100 TL</span>
-                <button class="btn" onclick="buyRuse()">SATIN AL VE İNDİR</button>
+                <button class="btn" id="buyBtn" onclick="buyRuse()">SATIN AL</button>
+            </div>
+        </div>
+
+        <div id="p-library" class="page">
+            <h2 style="font-family:'Orbitron'; text-align:center;">SAHİP OLDUĞUN ÜRÜNLER</h2>
+            <div id="emptyLib" class="panel" style="margin-top:20px;">Henüz bir ürünün yok kanka.</div>
+            <div id="fullLib" style="display:none;" class="card">
+                <h3 style="font-family:'Orbitron'">RUSE.PRO CLIENT</h3>
+                <p style="color:#666;">Sürüm: v1.0 | Format: .jar</p>
+                <a href="https://senin-siten.com/dosyalar/ruse_pro.jar" download class="btn" style="background:var(--accent)">ŞİMDİ İNDİR</a>
             </div>
         </div>
 
@@ -76,20 +88,15 @@
                 <input type="text" id="coupon" placeholder="KODU GİR"><br>
                 <button class="btn" onclick="redeem()">ONAYLA</button>
                 <br><br>
-                <a href="https://www.itemsatis.com/minecraft/ruse-bakiye-100tl-5139335.html" target="_blank" style="color:var(--accent); text-decoration:none;">İtemSatış'tan Kod Al</a>
+                <a href="https://www.itemsatis.com/minecraft/ruse-bakiye-100tl-5139335.html" target="_blank" style="color:var(--accent); text-decoration:none;">İtemSatış Mağazası</a>
             </div>
-        </div>
-
-        <div id="p-team" class="page">
-            <div class="card"><span>KURUCU</span><h3>Trickster</h3></div>
-            <div class="card"><span>ORTAK</span><h3>DarkMertatom</h3></div>
         </div>
 
         <div id="adminPanel" class="page">
             <div class="panel" style="border-color: var(--accent);">
-                <h2 style="font-family:'Orbitron'">ADMIN CONTROL</h2>
-                <input type="number" id="genAmount" placeholder="TL MİKTARI"><br>
-                <button class="btn" onclick="generateAndSend()" style="background:var(--accent)">KOD ÜRET VE DC'YE AT</button>
+                <h2 style="font-family:'Orbitron'">ADMIN PANEL</h2>
+                <input type="number" id="genAmount" placeholder="TL"><br>
+                <button class="btn" onclick="generateAndSend()" style="background:var(--accent)">KOD ÜRET</button>
             </div>
         </div>
     </div>
@@ -98,58 +105,78 @@
         const WH = "https://discord.com/api/webhooks/1491501294920401017/FFsIOxHwhyE1cSzWXPiKJJIHESAkzxfDI7oizQG15SW-nN6V4jxpTMf8YO9GPZooW6Ct";
         const ADMIN_PASS = "ruse.admin.1234";
 
-        function handleAuth() {
-            const m = document.getElementById('regEmail').value.trim();
-            const u = document.getElementById('regUser').value.trim();
-            const p = document.getElementById('regPass').value.trim();
+        function showAuth(id) {
+            document.getElementById('loginBox').classList.remove('active');
+            document.getElementById('registerBox').classList.remove('active');
+            document.getElementById(id).classList.add('active');
+        }
+
+        function register() {
+            const m = document.getElementById('rMail').value.trim();
+            const u = document.getElementById('rUser').value.trim();
+            const p = document.getElementById('rPass').value.trim();
             if(!m || !u || !p) return alert("Doldur!");
+            if(localStorage.getItem('user_' + u)) return alert("Bu kullanıcı adı alınmış!");
+            
+            const userData = { mail: m, user: u, pass: p, bal: 0, hasPro: false };
+            localStorage.setItem('user_' + u, JSON.stringify(userData));
+            alert("Kayıt başarılı! Giriş yapabilirsin.");
+            showAuth('loginBox');
+        }
 
-            const savedUser = localStorage.getItem('r_user');
-            if(savedUser && savedUser === u && localStorage.getItem('r_mail') !== m) return alert("Bu isim kapılmış!");
-
-            localStorage.setItem('r_mail', m);
-            localStorage.setItem('r_user', u);
-            localStorage.setItem('r_pass', p);
-            if(!localStorage.getItem('r_bal')) localStorage.setItem('r_bal', '0');
-            localStorage.setItem('isLogged', 'true');
-            location.reload();
+        function login() {
+            const u = document.getElementById('lUser').value.trim();
+            const p = document.getElementById('lPass').value.trim();
+            const data = localStorage.getItem('user_' + u);
+            if(data) {
+                const user = JSON.parse(data);
+                if(user.pass === p) {
+                    localStorage.setItem('currentUser', u);
+                    location.reload();
+                } else { alert("Şifre yanlış!"); }
+            } else { alert("Kullanıcı bulunamadı!"); }
         }
 
         window.onload = () => {
-            if(localStorage.getItem('isLogged')) {
-                document.getElementById('authBox').style.display = 'none';
+            const current = localStorage.getItem('currentUser');
+            if(current) {
                 document.getElementById('mainMenu').style.display = 'flex';
-                document.getElementById('userBal').innerText = localStorage.getItem('r_bal');
+                updateUserUI();
                 checkHash();
+            } else {
+                showAuth('loginBox');
             }
         };
 
-        window.onhashchange = checkHash;
-
-        function checkHash() {
-            if(window.location.hash === "#kod") {
-                let pass = prompt("Admin Şifresi:");
-                if(pass === ADMIN_PASS) {
-                    show('adminPanel');
-                } else { window.location.hash = ""; show('shop'); }
-            } else {
-                if(localStorage.getItem('isLogged')) show('shop');
+        function updateUserUI() {
+            const u = localStorage.getItem('currentUser');
+            const data = JSON.parse(localStorage.getItem('user_' + u));
+            document.getElementById('userBal').innerText = data.bal;
+            
+            if(data.hasPro) {
+                document.getElementById('emptyLib').style.display = 'none';
+                document.getElementById('fullLib').style.display = 'block';
+                document.getElementById('buyBtn').innerText = "ZATEN SAHİPSİN";
+                document.getElementById('buyBtn').disabled = true;
             }
         }
 
-        function show(id) {
+        function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('p-' + id)?.classList.add('active'); // Normal sayfalar için
-            document.getElementById(id)?.classList.add('active'); // Admin panel için
+            document.getElementById('p-' + id)?.classList.add('active');
+            document.getElementById(id)?.classList.add('active');
         }
 
         function buyRuse() {
-            let bal = parseInt(localStorage.getItem('r_bal')) || 0;
-            if(bal >= 100) {
-                bal -= 100;
-                localStorage.setItem('r_bal', bal);
-                document.getElementById('dlScreen').style.display = 'flex';
-                document.getElementById('userBal').innerText = bal;
+            const u = localStorage.getItem('currentUser');
+            let data = JSON.parse(localStorage.getItem('user_' + u));
+            if(data.bal >= 100) {
+                data.bal -= 100;
+                data.hasPro = true;
+                localStorage.setItem('user_' + u, JSON.stringify(data));
+                alert("Satın alındı! Hesabım kısmından indirebilirsin.");
+                updateUserUI();
+                showPage('library');
             } else { alert("Bakiye yetersiz!"); }
         }
 
@@ -157,13 +184,26 @@
             const code = document.getElementById('coupon').value.toUpperCase();
             let codes = JSON.parse(localStorage.getItem('ruse_dynamic_codes')) || {};
             if(codes[code]) {
-                let bal = (parseInt(localStorage.getItem('r_bal')) || 0) + codes[code];
-                localStorage.setItem('r_bal', bal);
+                const u = localStorage.getItem('currentUser');
+                let data = JSON.parse(localStorage.getItem('user_' + u));
+                data.bal += codes[code];
+                localStorage.setItem('user_' + u, JSON.stringify(data));
                 delete codes[code];
                 localStorage.setItem('ruse_dynamic_codes', JSON.stringify(codes));
-                alert("Başarılı!");
-                location.reload();
-            } else { alert("Geçersiz!"); }
+                alert("Bakiye yüklendi!");
+                updateUserUI();
+            } else { alert("Geçersiz kod!"); }
+        }
+
+        function logout() { localStorage.removeItem('currentUser'); location.reload(); }
+
+        window.onhashchange = checkHash;
+        function checkHash() {
+            if(window.location.hash === "#kod") {
+                let pass = prompt("Admin Şifresi:");
+                if(pass === ADMIN_PASS) showPage('adminPanel');
+                else { window.location.hash = ""; showPage('shop'); }
+            } else { showPage('shop'); }
         }
 
         function generateAndSend() {
@@ -173,12 +213,7 @@
             let codes = JSON.parse(localStorage.getItem('ruse_dynamic_codes')) || {};
             codes[code] = amt;
             localStorage.setItem('ruse_dynamic_codes', JSON.stringify(codes));
-
-            fetch(WH, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ embeds: [{ title: "🛠 YENİ KOD", description: `**Kod:** ||${code}||\n**Değer:** ${amt} TL`, color: 5763719 }] })
-            }).then(() => alert("Kod DC'ye uçtu!"));
+            fetch(WH, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ embeds: [{ title: "🛠 YENİ KOD", description: `**Kod:** ||${code}||\n**Değer:** ${amt} TL`, color: 5763719 }] }) }).then(() => alert("DC'ye gitti!"));
         }
     </script>
 </body>
